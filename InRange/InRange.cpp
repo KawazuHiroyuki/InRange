@@ -1,20 +1,82 @@
-﻿// InRange.cpp : このファイルには 'main' 関数が含まれています。プログラム実行の開始と終了がそこで行われます。
-//
+﻿#include <iostream>
+#include "InRange.h"
 
-#include <iostream>
+
+template<typename Type, bool IncludeMin, bool IncludeMax>
+bool within(const InRange<Type, IncludeMin, IncludeMax>& range, const Type& value)
+{
+    return range.within(value);
+}
+
+template<typename Type, bool IncludeMin, bool IncludeMax>
+const Type& clamp(const InRange<Type, IncludeMin, IncludeMax>& range, const Type& value)
+{
+    return range.clamp(value);
+}
+
+template<typename Type, Type Min, Type Max>
+bool within(const InRangeEx<Type, Min, Max>& range, const Type& value)
+{
+    return range.within(value);
+}
+
+template<typename Type, Type Min, Type Max>
+const Type& clamp(const InRangeEx<Type, Min, Max>& range, const Type& value)
+{
+    return range.clamp(value);
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    {
+        InRange<int, false, false> a(0, 21);
+        bool result0;
+        result0 = a.within(-1);
+        result0 = a.within(0);
+        result0 = a.within(1);
+        result0 = a.within(20);
+        result0 = a.within(21);
+        result0 = a.within(22);
+
+        int result1 = a.clamp(-1);
+        result1 = -100;
+        result1 = a.clamp(0);
+        result1 = -100;
+        result1 = a.clamp(1);
+        result1 = -100;
+        result1 = a.clamp(20);
+        result1 = -100;
+        result1 = a.clamp(21);
+        result1 = -100;
+        result1 = a.clamp(22);
+
+        bool result6 = within(a, 1);
+        bool result7 = within(a, -1);
+        bool result8 = within(a, 22);
+
+        int result9 = clamp(a, 3);
+        int result10 = clamp(a, -2);
+        int result11 = clamp(a, 23);
+        int b = result11;
+    }
+
+    {
+        InRangeEx<int, 0, 21> a;
+        bool result0 = a.within(1);
+        bool result1 = a.within(-1);
+        bool result2 = a.within(22);
+
+        int result3 = a.clamp(3);
+        int result4 = a.clamp(-2);
+        int result5 = a.clamp(23);
+
+        bool result6 = within(a, 1);
+        bool result7 = within(a, -1);
+        bool result8 = within(a, 22);
+
+        int result9 = clamp(a, 3);
+        int result10 = clamp(a, -2);
+        int result11 = clamp(a, 23);
+        int b = result11;
+    }
 }
-
-// プログラムの実行: Ctrl + F5 または [デバッグ] > [デバッグなしで開始] メニュー
-// プログラムのデバッグ: F5 または [デバッグ] > [デバッグの開始] メニュー
-
-// 作業を開始するためのヒント: 
-//    1. ソリューション エクスプローラー ウィンドウを使用してファイルを追加/管理します 
-//   2. チーム エクスプローラー ウィンドウを使用してソース管理に接続します
-//   3. 出力ウィンドウを使用して、ビルド出力とその他のメッセージを表示します
-//   4. エラー一覧ウィンドウを使用してエラーを表示します
-//   5. [プロジェクト] > [新しい項目の追加] と移動して新しいコード ファイルを作成するか、[プロジェクト] > [既存の項目の追加] と移動して既存のコード ファイルをプロジェクトに追加します
-//   6. 後ほどこのプロジェクトを再び開く場合、[ファイル] > [開く] > [プロジェクト] と移動して .sln ファイルを選択します
